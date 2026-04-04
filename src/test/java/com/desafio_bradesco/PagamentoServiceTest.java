@@ -4,7 +4,6 @@ import com.desafio_bradesco.Service.PagamentoService;
 import com.desafio_bradesco.model.Pagamento;
 import com.desafio_bradesco.model.Proprietario;
 import com.desafio_bradesco.repository.PagamentoRepository;
-import com.desafio_bradesco.repository.ProprietarioRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,9 +24,6 @@ public class PagamentoServiceTest {
     private PagamentoRepository pagamentoRepository;
 
     @Mock
-    private ProprietarioRepository proprietarioRepository;
-
-    @Mock
     private Proprietario proprietario;
 
     @InjectMocks
@@ -36,11 +32,6 @@ public class PagamentoServiceTest {
     @Test
     void deveRetornarPagamentoSalvo(){
 
-        Proprietario proprietario = new Proprietario();
-        proprietario.setId(UUID.randomUUID());
-        proprietario.setNome(null);
-        proprietario.setSaldo(10000000000.00);
-
         Pagamento pagamento = new Pagamento();
 
         pagamento.setId(UUID.randomUUID());
@@ -48,8 +39,9 @@ public class PagamentoServiceTest {
         pagamento.setCpf("10000000000");
         pagamento.setInstituicaoBancaria(101);
         pagamento.setChavePix("10000000000");
-        pagamento.setValor(0.00);
-        pagamento.setStatus("Pendente");
+        pagamento.setValor(10.00);
+
+        when(proprietario.getSaldo()).thenReturn(100.00);
 
         pagamentoService.registraPagamento(pagamento);
 
@@ -60,12 +52,6 @@ public class PagamentoServiceTest {
     @Test
     void deveRetornarSaldoInsuficiente(){
 
-        UUID idTeste = UUID.randomUUID();
-
-        Proprietario proprietario = new Proprietario();
-        proprietario.setId(idTeste);
-        proprietario.setSaldo(50.00);
-
         Pagamento pagamento = new Pagamento();
 
         pagamento.setId(UUID.randomUUID());
@@ -74,9 +60,8 @@ public class PagamentoServiceTest {
         pagamento.setInstituicaoBancaria(101);
         pagamento.setChavePix("10000000000");
         pagamento.setValor(100.00);
-        pagamento.setStatus("Pendente");
 
-        when(proprietarioRepository.findById(idTeste)).thenReturn(Optional.of(proprietario));
+        when(proprietario.getSaldo()).thenReturn(90.00);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             pagamentoService.registraPagamento(pagamento);
@@ -89,11 +74,6 @@ public class PagamentoServiceTest {
     @Test
     void deveRetornarImpossivel(){
 
-        Proprietario proprietario = new Proprietario();
-        proprietario.setId(UUID.randomUUID());
-        proprietario.setNome(null);
-        proprietario.setSaldo(10000000000.00);
-
         Pagamento pagamento = new Pagamento();
 
         pagamento.setId(UUID.randomUUID());
@@ -102,11 +82,14 @@ public class PagamentoServiceTest {
         pagamento.setInstituicaoBancaria(101);
         pagamento.setChavePix("10000000000");
         pagamento.setValor(0.00);
-        pagamento.setStatus("Pendente");
 
-        pagamentoService.registraPagamento(pagamento);
+        when(proprietario.getSaldo()).thenReturn(90.00);
 
-        verify(pagamentoRepository).save(pagamento);
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            pagamentoService.registraPagamento(pagamento);
+        });
+
+        assertEquals("Impossível realizar pagamento com valor negativo", exception.getMessage());
 
     }
 
