@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
@@ -92,6 +91,5 @@ public class PagamentoServiceTest {
         assertEquals("Impossível realizar pagamento com valor negativo", exception.getMessage());
 
     }
-
 
 }

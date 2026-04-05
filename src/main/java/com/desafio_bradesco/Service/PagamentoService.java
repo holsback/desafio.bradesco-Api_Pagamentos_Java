@@ -5,6 +5,8 @@ import com.desafio_bradesco.model.Proprietario;
 import com.desafio_bradesco.repository.PagamentoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PagamentoService {
 
@@ -20,4 +22,9 @@ public class PagamentoService {
             pagamentoRepository.save(pagamento);
         }
     }
+
+    public List<Pagamento> listarTodos(){
+        return pagamentoRepository.findAll();
+    }
+
 }
