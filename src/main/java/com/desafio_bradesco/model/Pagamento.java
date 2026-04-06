@@ -22,7 +22,7 @@ public class Pagamento {
     private UUID id;
     private String destinatario;
     private String cpf;
-    private int instituicaoBancaria;
+    private Integer instituicaoBancaria;
     private String chavePix;
     private Double Valor;
     private Date dataPagamento;

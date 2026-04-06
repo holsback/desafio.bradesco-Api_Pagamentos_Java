@@ -16,6 +16,6 @@ public class Proprietario {
     private UUID id;
     private String nome = "Bruno";
     private String CPF = "000.000.000-00";
-    private Double saldo = 100000.00;
+    private Double saldo = 100.00;
 
 }

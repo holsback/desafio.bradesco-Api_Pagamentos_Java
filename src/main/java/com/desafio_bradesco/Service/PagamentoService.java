@@ -3,6 +3,7 @@ package com.desafio_bradesco.Service;
 import com.desafio_bradesco.model.Pagamento;
 import com.desafio_bradesco.model.Proprietario;
 import com.desafio_bradesco.repository.PagamentoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,8 +11,10 @@ import java.util.List;
 @Service
 public class PagamentoService {
 
+    @Autowired
     PagamentoRepository pagamentoRepository;
-    Proprietario proprietario;
+
+    Proprietario proprietario = new Proprietario();
 
     public void registraPagamento(Pagamento pagamento){
         if (proprietario.getSaldo() < pagamento.getValor()){
@@ -27,33 +30,42 @@ public class PagamentoService {
         return pagamentoRepository.findAll();
     }
 
-    public void atualizaPagamento(Pagamento pagamento){
-        //Altera destinatário
+    public void atualizaPagamento(Pagamento pagamento) {
+
+        Pagamento pagamentoExistente = pagamentoRepository.findById(pagamento.getId())
+                .orElseThrow(() -> new RuntimeException("Pagamento não encontrado com o ID: " + pagamento.getId()));
+
+        //Atualiza destinatário
         if (pagamento.getDestinatario() != null && !pagamento.getDestinatario().isBlank()) {
-            pagamento.setDestinatario(pagamento.getDestinatario());
+            pagamentoExistente.setDestinatario(pagamento.getDestinatario());
         }
-        //Altera CPF
+
+        //Atualiza CPF
         if (pagamento.getCpf() != null && !pagamento.getCpf().isBlank()) {
-            pagamento.setCpf(pagamento.getCpf());
+            pagamentoExistente.setCpf(pagamento.getCpf());
         }
-        //Altera instinuicao bancaria
-        if (pagamento.getInstituicaoBancaria() > 0) {
-            pagamento.setDestinatario(pagamento.getDestinatario());
-        } else  {
-            throw new RuntimeException("Instituição bancária inexistente");
+
+        //Atualiza Instituicao Bancaria
+        if (pagamento.getInstituicaoBancaria() != null && pagamento.getInstituicaoBancaria() > 0) {
+            pagamentoExistente.setInstituicaoBancaria(pagamento.getInstituicaoBancaria());
         }
-        //Altera Chave PIX
+
+        //Atualiza ChavePix
         if (pagamento.getChavePix() != null && !pagamento.getChavePix().isBlank()) {
-            pagamento.setChavePix(pagamento.getChavePix());
+            pagamentoExistente.setChavePix(pagamento.getChavePix());
         }
-        //Altera Valor Pagamento
-        if (pagamento.getValor() > 0) {
-            pagamento.setValor(pagamento.getValor());
+
+        //Atualiza Valor
+        if (pagamento.getValor() != null && pagamento.getValor() > 0) {
+            pagamentoExistente.setValor(pagamento.getValor());
         }
-        //Altera descrição
+
+        //Atualiza Descricao
         if (pagamento.getDescrição() != null && !pagamento.getDescrição().isBlank()) {
-            pagamento.setDescrição(pagamento.getDescrição());
+            pagamentoExistente.setDescrição(pagamento.getDescrição());
         }
+
+        pagamentoRepository.save(pagamentoExistente);
     }
 
     public void deletaPagamento(Pagamento pagamento){
