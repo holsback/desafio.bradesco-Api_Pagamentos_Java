@@ -22,6 +22,8 @@ public class PagamentoService {
         } else if (pagamento.getValor() <= 0) {
             throw new RuntimeException("Impossível realizar pagamento com valor negativo");
         } else {
+            double porcentagem = (pagamento.getValor() * 100) / proprietario.getSaldo();
+            pagamento.setPorcentagemPagamento(porcentagem);
             pagamentoRepository.save(pagamento);
         }
     }

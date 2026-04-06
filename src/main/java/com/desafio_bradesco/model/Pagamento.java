@@ -24,8 +24,9 @@ public class Pagamento {
     private String cpf;
     private Integer instituicaoBancaria;
     private String chavePix;
-    private Double Valor;
+    private Double valor;
     private Date dataPagamento;
-    private String Descrição;
+    private String descrição;
+    private Double porcentagemPagamento;
 
 }
