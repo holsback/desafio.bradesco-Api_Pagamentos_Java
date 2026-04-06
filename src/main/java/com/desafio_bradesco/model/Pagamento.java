@@ -1,9 +1,6 @@
 package com.desafio_bradesco.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +17,8 @@ import java.util.UUID;
 public class Pagamento {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", columnDefinition = "UUID", updatable = false, nullable = false)
     private UUID id;
     private String destinatario;
     private String cpf;
@@ -29,6 +27,5 @@ public class Pagamento {
     private Double Valor;
     private Date dataPagamento;
     private String Descrição;
-    private String status;
 
 }

@@ -26,4 +26,14 @@ public class PagamentoController {
         return ResponseEntity.ok(pagamentos);
     }
 
+    @PutMapping("/atualiza")
+    public void atualizaPagamento(@RequestBody Pagamento pagamento){
+        pagamentoService.atualizaPagamento(pagamento);
+    }
+
+    @DeleteMapping("/deleta")
+    public void deletaPagamento(@RequestBody Pagamento pagamento){
+        pagamentoService.deletaPagamento(pagamento);
+    }
+
 }

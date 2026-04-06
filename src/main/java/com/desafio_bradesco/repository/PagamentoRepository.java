@@ -13,6 +13,4 @@ public interface PagamentoRepository extends JpaRepository<Pagamento, UUID> {
 
     Optional<Pagamento> findByDataPagamento(Date dataPagamento);
 
-    Optional<Pagamento>findByIDPagamento(UUID ID);
-
 }
